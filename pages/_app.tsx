@@ -40,7 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           accentColor: "#4d7c0f",
           accentColorForeground: "#f7fee7",
           borderRadius: "medium",
-          fontStack: "system",
         })}
         modalSize="compact"
         chains={chains}
