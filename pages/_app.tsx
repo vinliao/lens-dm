@@ -2,7 +2,11 @@ import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  lightTheme,
+} from "@rainbow-me/rainbowkit";
 import {
   WagmiConfig,
   createClient,
@@ -31,7 +35,16 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider
+        theme={lightTheme({
+          accentColor: "#4d7c0f",
+          accentColorForeground: "#f7fee7",
+          borderRadius: "medium",
+          fontStack: "system",
+        })}
+        modalSize="compact"
+        chains={chains}
+      >
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
