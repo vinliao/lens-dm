@@ -8,7 +8,6 @@ export function PulseContactList() {
       <PulseContact></PulseContact>
       <PulseContact></PulseContact>
       <PulseContact></PulseContact>
-      <PulseContact></PulseContact>
     </div>
   );
 }
