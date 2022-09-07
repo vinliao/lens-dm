@@ -1,14 +1,52 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import supabase from "../components/db";
 import { useAccount } from "wagmi";
+import { sortBy } from "lodash";
 
 export default function Home() {
+  interface ChatInterface {
+    dm_to: string;
+    dm_from: string;
+    timestamp: number;
+    dm_cleartext: string;
+  }
+
   const [currentInput, setCurrentInput] = useState("");
   const router = useRouter();
   const { id } = router.query;
   const { address } = useAccount();
+  const [sortedChat, setSortedChat] = useState<ChatInterface[]>([
+    { dm_to: "", dm_from: "", timestamp: 0, dm_cleartext: "" },
+  ]);
+  const [chatReady, setChatReady] = useState(false);
+
+  // on page render, get chat
+  useEffect(() => {
+    getChat();
+  }, []);
+
+  async function getChat() {
+    const { data: dataFrom, error: errorFrom } = await supabase
+      .from("dm")
+      .select("dm_cleartext, dm_from, dm_to, timestamp")
+      .match({ dm_from: address, dm_to: id });
+
+    const { data: dataTo, error: errorTo } = await supabase
+      .from("dm")
+      .select("dm_cleartext, dm_from, dm_to, timestamp")
+      .match({ dm_from: id, dm_to: address });
+
+    // error if only one side chat, or if no chat
+    // huge potential of error here!
+    const data = dataFrom!.concat(dataTo);
+
+    setSortedChat(sortBy(data, "timestamp"));
+    setChatReady(true);
+    console.log(sortedChat);
+    // console.log(sortedChat);
+  }
 
   async function sendMessage() {
     // so the animation is "snappy"
@@ -17,16 +55,14 @@ export default function Home() {
 
     // handle if send to .lens handle instead of
     // raw address
-    const { data, error } = await supabase
-      .from("dm")
-      .insert([
-        {
-          dm_from: address,
-          dm_to: id,
-          dm_cleartext: inputToBeSend,
-          timestamp: Date.now(),
-        },
-      ]);
+    await supabase.from("dm").insert([
+      {
+        dm_from: address,
+        dm_to: id,
+        dm_cleartext: inputToBeSend,
+        timestamp: Date.now(),
+      },
+    ]);
   }
 
   return (
@@ -53,7 +89,26 @@ export default function Home() {
           </svg>
         </Link>
       </div>
-      <div className="flex-1 bg-rose-200">chat body</div>
+      <div className="flex-1 flex flex-col justify-end bg-rose-50 border-x-2 border-rose-200">
+        {chatReady &&
+          sortedChat.map((chat) => {
+            if (chat.dm_from == address) {
+              return (
+                <div className="flex">
+                  <div className="flex-1"></div>
+                  <span>{chat.dm_cleartext}</span>
+                </div>
+              );
+            } else {
+              return (
+                <div className="flex">
+                  <span>{chat.dm_cleartext}</span>
+                  <div className="flex-1"></div>
+                </div>
+              );
+            }
+          })}
+      </div>
       <div className="p-3 flex justify-between items-center">
         <input
           type="text"

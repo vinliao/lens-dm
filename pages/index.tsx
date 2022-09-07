@@ -16,7 +16,6 @@ export default function Home() {
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
       .or(`dm_from.eq.${address},dm_to.eq.${address}`);
-    console.log(data);
 
     if (data) {
       return data;
