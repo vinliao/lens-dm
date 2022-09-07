@@ -1,11 +1,11 @@
 export function Contact({
   name,
-  lastMessage,
-  timestamp,
+  // lastMessage,
+  // timestamp,
 }: {
   name: string;
-  lastMessage: string;
-  timestamp: number;
+  // lastMessage: string;
+  // timestamp: number;
 }) {
   return (
     <div className="flex flex-col py-5 border-b-2 border-rose-100 px-3">
@@ -14,7 +14,7 @@ export function Contact({
         {/* skip timestamp for now */}
         {/* <span>{timestamp}</span> */}
       </div>
-      <p className="text-stone-500">{lastMessage}</p>
+      {/* <p className="text-stone-500">{lastMessage}</p> */}
     </div>
   );
 }
