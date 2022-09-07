@@ -11,7 +11,7 @@ export function Contact({
 }) {
   return (
     <Link href={name}>
-      <div className="flex flex-col py-5 border-b-2 border-rose-50 px-3 hover:cursor-pointer w-full hover:bg-rose-100 transition">
+      <div className="flex flex-col py-5 border-b-2 border-rose-50 px-3 hover:cursor-pointer w-full hover:text-rose-600 transition">
         <div className="flex justify-between mb-2 items-center">
           <span className="">{name}</span>
           {/* skip timestamp for now */}
