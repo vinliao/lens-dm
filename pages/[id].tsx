@@ -4,6 +4,7 @@ import Link from "next/link";
 import supabase from "../components/db";
 import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
+import { ChatBubble } from "../components/ChatBubble";
 
 export default function Home() {
   interface ChatInterface {
@@ -85,7 +86,7 @@ export default function Home() {
           </svg>
         </Link>
 
-        <span className="font-bold">
+        <span className="font-bold text-lg">
           {id?.slice(0, 4) + "..." + id?.slice(-4)}
         </span>
       </div>
@@ -94,17 +95,20 @@ export default function Home() {
           sortedChat.map((chat) => {
             if (chat.dm_from == address) {
               return (
-                <div className="flex">
-                  <div className="flex-1"></div>
-                  <span>{chat.dm_cleartext}</span>
-                </div>
+                // <div className="flex">
+                //   <div className="flex-1"></div>
+                //   <span>{chat.dm_cleartext}</span>
+                // </div>
+                <ChatBubble text={chat.dm_cleartext} left={false}></ChatBubble>
+
               );
             } else {
               return (
-                <div className="flex">
-                  <span>{chat.dm_cleartext}</span>
-                  <div className="flex-1"></div>
-                </div>
+                // <div className="flex">
+                //   <span>{chat.dm_cleartext}</span>
+                //   <div className="flex-1"></div>
+                // </div>
+                <ChatBubble text={chat.dm_cleartext} left={true}></ChatBubble>
               );
             }
           })}
