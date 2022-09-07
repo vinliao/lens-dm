@@ -1,15 +1,14 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useSignMessage, useAccount } from "wagmi";
 import { PulseContactList } from "../components/PulseContactList";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import supabase from "../components/db";
-import { uniq } from "lodash";
+import { uniq, sortBy } from "lodash";
 import { Contact } from "../components/Contact";
 
 export default function Home() {
   const { address, isConnecting, isConnected, isDisconnected } = useAccount();
-  const [showEmpty, setShowEmpty] = useState(false);
+  const [showEmpty, setShowEmpty] = useState(true);
   const [allChat, setAllChat] = useState([""]);
 
   async function getAllDMs() {
@@ -17,6 +16,7 @@ export default function Home() {
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
       .or(`dm_from.eq.${address},dm_to.eq.${address}`);
+    console.log(data);
 
     if (data) {
       return data;
@@ -26,20 +26,16 @@ export default function Home() {
   useEffect(() => {
     if (isConnected) {
       getAllDMs().then((res) => {
-        console.log(res);
-        if (res) {
-          if (res.length == 0) {
-            setShowEmpty(true);
-          } else {
-            console.log("calculating unique");
-            const nonUniqueContact = res.map((message) => {
-              if (message.dm_from == address) return message.dm_to;
-              return message.dm_from;
-            });
-            const uniqueContact = uniq(nonUniqueContact);
-            console.log(uniqueContact);
-            setAllChat(uniqueContact);
-          }
+        if (res && res.length > 0) {
+          setShowEmpty(false);
+          const nonUniqueContact = res.map((message) => {
+            if (message.dm_from == address) return message.dm_to;
+            return message.dm_from;
+          });
+          const uniqueContact = uniq(nonUniqueContact);
+          console.log(uniqueContact);
+
+          setAllChat(uniqueContact);
         }
       });
     }
@@ -57,8 +53,27 @@ export default function Home() {
         </>
       ) : (
         <div className="flex flex-col justify-center items-center my-5">
-          <ConnectButton></ConnectButton>
-          {showEmpty ? <p>is empty!</p> : allChat.map((chat) => <Contact name={chat}/>)}
+          <div className="mb-5">
+            <ConnectButton></ConnectButton>
+          </div>
+          {showEmpty ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 animate animate-spin"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 12h-15"
+              />
+            </svg>
+          ) : (
+            allChat.map((chat) => <Contact name={chat} key={chat} />)
+          )}
         </div>
       )}
     </div>

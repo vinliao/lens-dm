@@ -1,20 +1,27 @@
+import Link from "next/link";
+
 export function Contact({
   name,
-  // lastMessage,
-  // timestamp,
-}: {
+}: // lastMessage,
+// timestamp,
+{
   name: string;
   // lastMessage: string;
   // timestamp: number;
 }) {
   return (
-    <div className="flex flex-col py-5 border-b-2 border-rose-100 px-3">
-      <div className="flex justify-between">
-        <span className="text-stone-800 font-bold">{name}</span>
-        {/* skip timestamp for now */}
-        {/* <span>{timestamp}</span> */}
+    <Link href={name}>
+      <div className="flex flex-col py-5 border-b-2 border-rose-50 px-3 hover:cursor-pointer w-full hover:bg-rose-100 transition">
+        <div className="flex justify-between mb-2 items-center">
+          <span className="">{name}</span>
+          {/* skip timestamp for now */}
+          {/* <span className="text-stone-400">3m</span>
+        </div>
+        <p className="text-stone-400">hello world how are you</p> */}
+          <span className="animate animate-pulse bg-rose-50 h-4 w-1/12 rounded-full"></span>
+        </div>
+        <div className=" animate animate-pulse bg-rose-50 h-16 w-full"></div>
       </div>
-      {/* <p className="text-stone-500">{lastMessage}</p> */}
-    </div>
+    </Link>
   );
 }
