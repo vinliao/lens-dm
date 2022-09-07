@@ -11,16 +11,16 @@ export function Contact({
 }) {
   return (
     <Link href={name}>
-      <div className="flex flex-col py-5 border-b-2 border-rose-50 px-3 hover:cursor-pointer w-full hover:text-rose-600 transition">
+      <div className="flex flex-col py-5 border-b-2 border-indigo-700 px-3 hover:cursor-pointer w-full hover:text-pink-300 transition text-pink-200">
         <div className="flex justify-between mb-2 items-center">
           <span className="">{name}</span>
           {/* skip timestamp for now */}
           {/* <span className="text-stone-400">3m</span>
         </div>
         <p className="text-stone-400">hello world how are you</p> */}
-          <span className="animate animate-pulse bg-rose-50 h-4 w-1/12 rounded-full"></span>
+          <span className="bg-indigo-600 h-4 w-1/5 rounded-full animate animate-pulse"></span>
         </div>
-        <div className=" animate animate-pulse bg-rose-50 h-16 w-full"></div>
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-400 h-16 w-full rounded-lg animate animate-pulse"></div>
       </div>
     </Link>
   );

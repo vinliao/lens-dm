@@ -5,7 +5,9 @@ import type { AppProps } from "next/app";
 import {
   getDefaultWallets,
   RainbowKitProvider,
+  midnightTheme,
   lightTheme,
+  darkTheme,
 } from "@rainbow-me/rainbowkit";
 import {
   WagmiConfig,
@@ -36,15 +38,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
-        theme={lightTheme({
-          accentColor: "#e11d48",
-          accentColorForeground: "#fff1f2",
+        theme={darkTheme({
+          accentColor: "#fbcfe8",
+          accentColorForeground: "#3730a3",
           borderRadius: "medium",
         })}
         modalSize="compact"
         chains={chains}
       >
-        <Component {...pageProps} />
+        <div className="bg-[url('/bg-small.svg')] md:bg-[url('/bg.svg')] bg-cover">
+          <Component {...pageProps} />
+        </div>
       </RainbowKitProvider>
     </WagmiConfig>
   );

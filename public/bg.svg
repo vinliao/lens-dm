@@ -1,0 +1,14 @@
+<svg width="1440" height="1024" viewBox="0 0 1440 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_50_5803)">
+<rect width="1440" height="1024" fill="url(#paint0_radial_50_5803)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_50_5803" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(878.5 320.925) rotate(133.938) scale(1021.06 968.771)">
+<stop stop-color="#F9A8D4"/>
+<stop offset="1" stop-color="#3730A3"/>
+</radialGradient>
+<clipPath id="clip0_50_5803">
+<rect width="1440" height="1024" fill="white"/>
+</clipPath>
+</defs>
+</svg>
