@@ -67,8 +67,11 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-rose-100 scrollbar-track-stone-50">
-      <div className="flex items-center p-3 space-x-10">
+    <div className="flex flex-col max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar relative no-scrollbar">
+      <div className="flex items-center p-3 justify-between sticky top-0 backdrop-blur-lg">
+        <span className="font-bold text-lg">
+          {id?.slice(0, 4) + "..." + id?.slice(-4)}
+        </span>
         <Link href={"/"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -81,39 +84,26 @@ export default function Home() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              d="M6 18L18 6M6 6l12 12"
             />
           </svg>
         </Link>
-
-        <span className="font-bold text-lg">
-          {id?.slice(0, 4) + "..." + id?.slice(-4)}
-        </span>
       </div>
-      <div className="flex-1 flex flex-col justify-end bg-indigo-800 border-y-2 border-indigo-700">
+      <div className="grow flex flex-col justify-end bg-indigo-800 py-2">
         {chatReady &&
           sortedChat.map((chat) => {
             if (chat.dm_from == address) {
               return (
-                // <div className="flex">
-                //   <div className="flex-1"></div>
-                //   <span>{chat.dm_cleartext}</span>
-                // </div>
                 <ChatBubble text={chat.dm_cleartext} left={false}></ChatBubble>
-
               );
             } else {
               return (
-                // <div className="flex">
-                //   <span>{chat.dm_cleartext}</span>
-                //   <div className="flex-1"></div>
-                // </div>
                 <ChatBubble text={chat.dm_cleartext} left={true}></ChatBubble>
               );
             }
           })}
       </div>
-      <div className="p-3 flex justify-between items-center">
+      <div className="p-3 flex justify-between items-center sticky bottom-0 bg-indigo-800 border-t-2 border-indigo-700">
         <input
           type="text"
           placeholder="Your message..."

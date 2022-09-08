@@ -42,7 +42,7 @@ export default function Home() {
 
   return (
     <div className="max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-800">
-      {isDisconnected ? (
+      {(isDisconnected || isConnecting) ? (
         <>
           <div className="flex flex-col justify-center items-center my-5">
             <p className="mb-2">Connect wallet to check your Lens inbox!</p>
@@ -51,7 +51,10 @@ export default function Home() {
           <PulseContactList></PulseContactList>
           <div className="flex">
             <div className="flex-1"></div>
-            <div className="flex items-center space-x-2 my-4 px-5">
+            <a
+              className="flex items-center space-x-2 m-5"
+              href="https://github.com"
+            >
               <span>GitHub</span>
               <span>
                 <svg
@@ -64,7 +67,7 @@ export default function Home() {
                   <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z" />
                 </svg>
               </span>
-            </div>
+            </a>
           </div>
         </>
       ) : (
