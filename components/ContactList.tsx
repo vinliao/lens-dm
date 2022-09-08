@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { useAccount } from "wagmi";
 import { uniq } from "lodash";
 import { Contact } from "./Contact";
+import { GitHubLink } from "./GitHubLink";
 
 export function ContactList() {
   const { address } = useAccount();
@@ -24,7 +25,6 @@ export function ContactList() {
   }
 
   const { data, status } = useQuery("contacts", getAllContact);
-  console.log(data);
 
   if (status == "loading") {
     return (

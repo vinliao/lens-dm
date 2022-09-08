@@ -5,23 +5,18 @@ import supabase from "../components/db";
 import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export default function Home() {
-  interface ChatInterface {
-    dm_to: string;
-    dm_from: string;
-    timestamp: number;
-    dm_cleartext: string;
-  }
-
   const [currentInput, setCurrentInput] = useState("");
   const router = useRouter();
   const { id } = router.query;
   const { address } = useAccount();
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
-  const { data, status } = useQuery(`chat#${id}`, getChat);
+  const { data, status } = useQuery(["chat", id], getChat, {
+    // refetchInterval: 3000,
+  });
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView();
@@ -52,7 +47,7 @@ export default function Home() {
 
     // handle if send to .lens handle instead of
     // raw address
-    await supabase.from("dm").insert([
+    const { data, error } = await supabase.from("dm").insert([
       {
         dm_from: address,
         dm_to: id,
@@ -60,7 +55,14 @@ export default function Home() {
         timestamp: Date.now(),
       },
     ]);
+
+    return data;
   }
+
+  const clientQuery = useQueryClient();
+  const { mutateAsync } = useMutation(sendMessage, {
+    onSuccess: () => clientQuery.invalidateQueries(["chat", id]),
+  });
 
   return (
     <div className="flex flex-col max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar relative no-scrollbar">
@@ -128,6 +130,11 @@ export default function Home() {
           className="bg-indigo-800 placeholder:text-indigo-400 flex-1 focus:outline-none"
           onChange={(e) => setCurrentInput(e.target.value)}
           value={currentInput}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              mutateAsync();
+            }
+          }}
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +144,7 @@ export default function Home() {
           stroke="currentColor"
           className="w-6 h-6 hover:cursor-pointer"
           onClick={() => {
-            sendMessage();
+            mutateAsync();
           }}
         >
           <path
