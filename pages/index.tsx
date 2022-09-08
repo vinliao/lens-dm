@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [newChatHandle, setNewChatHandle] = useState("");
-  const { address, isConnecting, isConnected, isDisconnected } = useAccount();
+  const { address, isConnecting, isConnected, isDisconnected, isReconnecting } = useAccount();
   const router = useRouter();
   const { disconnect } = useDisconnect();
 
@@ -53,7 +53,7 @@ export default function Home() {
           ></div>
         </div>
       )}
-      {isDisconnected ? (
+      {(isDisconnected || isConnecting || isReconnecting) ? (
         <>
           <div className="flex flex-col justify-center items-center my-5">
             <p className="mb-2">Connect wallet to check your Lens inbox!</p>

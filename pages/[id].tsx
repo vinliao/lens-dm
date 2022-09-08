@@ -131,7 +131,6 @@ export default function Home() {
         </div>
       )}
 
-        {/* ideally display some graphic or something */}
       {status == "success" && data.length == 0 && (
         <div className="flex justify-center items-center h-full">
           <p className="text-2xl font-bold">Start chatting!</p>

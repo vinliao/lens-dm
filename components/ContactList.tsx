@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import { useAccount } from "wagmi";
 import { uniq } from "lodash";
 import { Contact } from "./Contact";
-import { GitHubLink } from "./GitHubLink";
 
 export function ContactList() {
   const { address } = useAccount();
@@ -38,6 +37,14 @@ export function ContactList() {
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
       </svg>
+    );
+  }
+
+  if (data!.length == 0) {
+    return (
+      <div className="flex justify-center my-10">
+        <p>Contact empty, click the add icon and start chatting!</p>
+      </div>
     );
   }
 
