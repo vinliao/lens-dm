@@ -153,7 +153,7 @@ export default function Home() {
         <input
           type="text"
           placeholder="Your message..."
-          className="bg-indigo-800 placeholder:text-indigo-400 flex-1 focus:outline-none"
+          className="bg-indigo-800 placeholder:text-indigo-400 flex-1 focus:outline-none mr-4"
           onChange={(e) => setCurrentInput(e.target.value)}
           value={currentInput}
           onKeyDown={(e) => {
