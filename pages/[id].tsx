@@ -15,7 +15,7 @@ export default function Home() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const { data, status } = useQuery(["chat", id], getChat, {
-    // refetchInterval: 3000,
+    refetchInterval: 5000,
   });
 
   useEffect(() => {
@@ -59,9 +59,35 @@ export default function Home() {
     return data;
   }
 
-  const clientQuery = useQueryClient();
+  const queryClient = useQueryClient();
   const { mutateAsync } = useMutation(sendMessage, {
-    onSuccess: () => clientQuery.invalidateQueries(["chat", id]),
+    onMutate: async () => {
+      const newChat = {
+        dm_from: address,
+        dm_to: id,
+        dm_cleartext: currentInput,
+        timestamp: Date.now(),
+      };
+
+      // cancel ongoing queries, get chat (for rollback)
+      await queryClient.cancelQueries(["chat", id]);
+      const previousChats = queryClient.getQueryData(["chat", id]);
+
+      // set local data to add a new one while actually mutating the data
+      // @ts-expect-error
+      queryClient.setQueryData(["chat", id], (old) => [...old, newChat]);
+      return previousChats;
+    },
+
+    onError: (err, newTodo, context) => {
+      // rollback if the query errors out
+      // @ts-expect-error
+      queryClient.setQueryData(["chat", id], context.previousTodos);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries(["chat", id]);
+    },
   });
 
   return (
