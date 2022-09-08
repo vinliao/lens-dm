@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { useAccount } from "wagmi";
 import { uniq } from "lodash";
 import { Contact } from "./Contact";
+import { sortBy } from "lodash";
 
 export function ContactList() {
   const { address } = useAccount();
@@ -19,11 +20,41 @@ export function ContactList() {
         return message.dm_from;
       });
       const uniqueContact = uniq(nonUniqueContact);
-      return uniqueContact;
+
+      // get latest chat and timestamp:
+      // 1. get all chat per contact
+      // 2. sort by timestamp
+      // 3. take last
+
+      interface ChatInterface {
+        dm_cleartext: string;
+        dm_from: string;
+        dm_to: string;
+        timestamp: number;
+        the_contact: string; // the recipient
+      }
+
+      let latestContactChat: ChatInterface[] = [];
+      uniqueContact.forEach((contact) => {
+        //something here
+        const fromContact = data.filter((chat) => chat.dm_from == contact);
+        const toContact = data.filter((chat) => chat.dm_to == contact);
+
+        const combined = fromContact.concat(toContact);
+        const sorted = sortBy(combined, "timestamp");
+        let lastChat = sorted[sorted.length - 1];
+        lastChat.the_contact = contact;
+        latestContactChat.push(lastChat);
+        // latestContactChat.push(sorted[sorted.length - 1]);
+      });
+
+      console.log(latestContactChat);
+      return latestContactChat;
     }
   }
 
   const { data, status } = useQuery("contacts", getAllContact);
+  console.log(data);
 
   if (status == "loading") {
     return (
@@ -51,7 +82,12 @@ export function ContactList() {
   return (
     <>
       {data!.map((chat) => (
-        <Contact name={chat} key={chat} />
+        <Contact
+          name={chat.the_contact}
+          key={chat.timestamp}
+          timestamp={chat.timestamp}
+          lastMessage={chat.dm_cleartext}
+        />
       ))}
     </>
   );
