@@ -5,6 +5,7 @@ import supabase from "../components/db";
 import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
+import { useQuery } from "react-query";
 
 export default function Home() {
   interface ChatInterface {
@@ -18,23 +19,15 @@ export default function Home() {
   const router = useRouter();
   const { id } = router.query;
   const { address } = useAccount();
-  const [sortedChat, setSortedChat] = useState<ChatInterface[]>([
-    { dm_to: "", dm_from: "", timestamp: 0, dm_cleartext: "" },
-  ]);
-  const [chatReady, setChatReady] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
-  // on page render, get chat
-  // useEffect(() => {
-  //   syncChat();
-  // }, []);
-  // setInterval(syncChat, 5000);
+  const { data, status } = useQuery(`chat#${id}`, getChat);
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView();
-  }, [sortedChat]);
+  }, [data]);
 
-  async function syncChat() {
+  async function getChat() {
     const { data: dataFrom, error: errorFrom } = await supabase
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
@@ -49,10 +42,7 @@ export default function Home() {
     // huge potential of error here!
     const data = dataFrom!.concat(dataTo);
 
-    setSortedChat(sortBy(data, "timestamp"));
-    setChatReady(true);
-    console.log(sortedChat);
-    // console.log(sortedChat);
+    return sortBy(data, "timestamp");
   }
 
   async function sendMessage() {
@@ -95,9 +85,28 @@ export default function Home() {
           </svg>
         </Link>
       </div>
-      <div className="grow flex flex-col justify-end bg-indigo-800 py-2">
-        {chatReady &&
-          sortedChat.map((chat) => {
+      {status == "loading" && (
+        <div className="flex justify-center items-center h-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 animate animate-spin"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19.5 12h-15"
+            />
+          </svg>
+        </div>
+      )}
+
+      {status == "success" && (
+        <div className="grow flex flex-col justify-end bg-indigo-800 py-2">
+          {data.map((chat) => {
             if (chat.dm_from == address) {
               return (
                 <ChatBubble text={chat.dm_cleartext} left={false}></ChatBubble>
@@ -108,9 +117,10 @@ export default function Home() {
               );
             }
           })}
+          <div ref={lastMessageRef}></div>
+        </div>
+      )}
 
-        <div ref={lastMessageRef}></div>
-      </div>
       <div className="p-3 flex justify-between items-center sticky bottom-0 bg-indigo-800 border-t-2 border-indigo-700">
         <input
           type="text"
