@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
-
 import {
   getDefaultWallets,
   RainbowKitProvider,
@@ -17,6 +16,7 @@ import {
   chain,
 } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 const { chains, provider } = configureChains(
   [chain.mainnet],
@@ -34,6 +34,8 @@ const wagmiClient = createClient({
   provider,
 });
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
@@ -47,7 +49,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         chains={chains}
       >
         <div className="bg-[url('/bg-small.svg')] md:bg-[url('/bg.svg')] bg-cover">
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
         </div>
       </RainbowKitProvider>
     </WagmiConfig>

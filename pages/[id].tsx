@@ -25,15 +25,16 @@ export default function Home() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   // on page render, get chat
-  useEffect(() => {
-    getChat();
-  }, []);
+  // useEffect(() => {
+  //   syncChat();
+  // }, []);
+  // setInterval(syncChat, 5000);
 
   useEffect(() => {
-    lastMessageRef.current?.scrollIntoView()
+    lastMessageRef.current?.scrollIntoView();
   }, [sortedChat]);
 
-  async function getChat() {
+  async function syncChat() {
     const { data: dataFrom, error: errorFrom } = await supabase
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
