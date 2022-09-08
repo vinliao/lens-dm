@@ -36,7 +36,7 @@ export default function Home() {
               }}
             />
             <button
-              className="bg-pink-200 text-indigo-700 px-4 font-bold mx-1 my-1.5 rounded-xl focus:outline-none"
+              className="bg-pink-200 text-indigo-700 px-4 mx-1 my-1.5 rounded-xl focus:outline-none"
               onClick={() => {
                 goToChatPage();
               }}
@@ -63,9 +63,33 @@ export default function Home() {
         </>
       ) : (
         <div className="my-5">
-          <div className="p-3">
-            <div className="flex space-x-4 items-baseline">
+          <div className="px-3">
+            <div className="flex justify-end">
+              <div
+                className="h-8 w-8 bg-pink-200 rounded-full flex justify-center items-center hover:cursor-pointer"
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6 text-indigo-800"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className="flex space-x-2 items-baseline">
               <span>handlename.lens</span>
+              <span>·</span>
               <span
                 className="text-sm text-indigo-400 underline hover:cursor-pointer"
                 onClick={() => {
@@ -78,21 +102,9 @@ export default function Home() {
             <p className="text-4xl font-bold">Chats</p>
           </div>
           <div className="flex flex-col justify-center items-center">
-            {/* <ConnectButton
-                accountStatus={"address"}
-                chainStatus={"none"}
-                showBalance={false}
-              ></ConnectButton> */}
             <ContactList></ContactList>
           </div>
           <GitHubLink></GitHubLink>
-          <p
-            onClick={() => {
-              setShowModal(true);
-            }}
-          >
-            asdf
-          </p>
         </div>
       )}
     </div>
