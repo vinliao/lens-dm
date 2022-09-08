@@ -1,5 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { PulseContactList } from "../components/PulseContactList";
 import { ContactList } from "../components/ContactList";
 import { GitHubLink } from "../components/GitHubLink";
@@ -11,9 +11,11 @@ export default function Home() {
   const [newChatHandle, setNewChatHandle] = useState("");
   const { address, isConnecting, isConnected, isDisconnected } = useAccount();
   const router = useRouter();
+  const { disconnect } = useDisconnect();
 
   function goToChatPage() {
     router.push(`/${newChatHandle}`);
+    setNewChatHandle("");
   }
 
   return (
@@ -61,24 +63,36 @@ export default function Home() {
         </>
       ) : (
         <div className="my-5">
+          <div className="p-3">
+            <div className="flex space-x-4 items-baseline">
+              <span>handlename.lens</span>
+              <span
+                className="text-sm text-indigo-400 underline hover:cursor-pointer"
+                onClick={() => {
+                  disconnect();
+                }}
+              >
+                disconnect
+              </span>
+            </div>
+            <p className="text-4xl font-bold">Chats</p>
+          </div>
           <div className="flex flex-col justify-center items-center">
-            <div className="mb-5">
-              <ConnectButton
+            {/* <ConnectButton
                 accountStatus={"address"}
                 chainStatus={"none"}
                 showBalance={false}
-              ></ConnectButton>
-            </div>
-            <p
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              asdf
-            </p>
+              ></ConnectButton> */}
             <ContactList></ContactList>
           </div>
           <GitHubLink></GitHubLink>
+          <p
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
+            asdf
+          </p>
         </div>
       )}
     </div>
