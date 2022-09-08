@@ -92,27 +92,26 @@ export default function Home() {
 
   return (
     <div className="flex flex-col max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar relative no-scrollbar">
-      <div className="flex items-center p-3 justify-between sticky top-0 backdrop-blur-lg">
-        <span className="font-bold text-lg">
-          {id?.slice(0, 4) + "..." + id?.slice(-4)}
-        </span>
+      <div className="flex items-center p-3 sticky top-0 backdrop-blur-lg space-x-7">
         <Link href={"/"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
             viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 hover:cursor-pointer"
+            fill="currentColor"
+            className="w-6 h-6 cursor-pointer"
           >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
+              fillRule="evenodd"
+              d="M11.03 3.97a.75.75 0 010 1.06l-6.22 6.22H21a.75.75 0 010 1.5H4.81l6.22 6.22a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z"
+              clipRule="evenodd"
             />
           </svg>
         </Link>
+        <span className="font-bold text-lg">
+          {id?.slice(0, 4) + "..." + id?.slice(-4)}
+        </span>
       </div>
+
       {status == "loading" && (
         <div className="flex justify-center items-center h-full">
           <svg
@@ -129,6 +128,13 @@ export default function Home() {
               d="M19.5 12h-15"
             />
           </svg>
+        </div>
+      )}
+
+        {/* ideally display some graphic or something */}
+      {status == "success" && data.length == 0 && (
+        <div className="flex justify-center items-center h-full">
+          <p className="text-2xl font-bold">Start chatting!</p>
         </div>
       )}
 
