@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import supabase from "../components/db";
 import { useAccount } from "wagmi";
@@ -22,11 +22,16 @@ export default function Home() {
     { dm_to: "", dm_from: "", timestamp: 0, dm_cleartext: "" },
   ]);
   const [chatReady, setChatReady] = useState(false);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   // on page render, get chat
   useEffect(() => {
     getChat();
   }, []);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView()
+  }, [sortedChat]);
 
   async function getChat() {
     const { data: dataFrom, error: errorFrom } = await supabase
@@ -102,6 +107,8 @@ export default function Home() {
               );
             }
           })}
+
+        <div ref={lastMessageRef}></div>
       </div>
       <div className="p-3 flex justify-between items-center sticky bottom-0 bg-indigo-800 border-t-2 border-indigo-700">
         <input
