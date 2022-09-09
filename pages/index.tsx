@@ -20,17 +20,16 @@ export default function Home() {
   } = useAccount();
   const router = useRouter();
   const { disconnect } = useDisconnect();
-  const [userDisplayName, setUserDisplayName] = useState("");
+
+  const { data: lensName, status: lensNameStatus } = useQuery(
+    ["user", address],
+    () => addressToLens(address)
+  );
 
   function goToChatPage() {
     router.push(`/${newChatHandle}`);
     setNewChatHandle("");
   }
-
-  addressToLens(address).then((res) => {
-    if (res) setUserDisplayName(res);
-    else setUserDisplayName(address!.slice(0, 5) + "..." + address!.slice(-5));
-  });
 
   return (
     <div className="max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-800 relative">
@@ -103,10 +102,10 @@ export default function Home() {
               </div>
             </div>
             <div className="flex space-x-2 items-baseline">
-              {userDisplayName ? (
-                <span>{userDisplayName}</span>
+              {lensNameStatus == "success" && lensName ? (
+                <span>{lensName}</span>
               ) : (
-                <span>connecting...</span>
+                <span>{address.slice(0, 5) + "..." + address.slice(-5)}</span>
               )}
               <span>·</span>
               <span
