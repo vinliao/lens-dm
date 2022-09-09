@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { useAccount } from "wagmi";
 import { uniq } from "lodash";
 import { Contact } from "./Contact";
-import { sortBy } from "lodash";
+import { sortBy, orderBy } from "lodash";
 import { addressToLens, checkIfEthAddress } from "./util";
 
 // library without type, red squiggly
@@ -67,8 +67,7 @@ export function ContactList() {
         latestContactChat.push(lastChat);
       });
 
-      console.log(latestContactChat);
-      return latestContactChat;
+      return orderBy(latestContactChat, "timestamp", "desc");
     }
   }
 
