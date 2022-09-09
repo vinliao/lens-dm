@@ -7,6 +7,10 @@ import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
+// library without type, red squiggly
+// @ts-expect-error
+import { SpeechBubble } from "react-kawaii";
+
 export default function Home() {
   const [currentInput, setCurrentInput] = useState("");
   const router = useRouter();
@@ -132,7 +136,8 @@ export default function Home() {
       )}
 
       {status == "success" && data.length == 0 && (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center h-full space-y-4">
+          <SpeechBubble size={125} mood="happy" color="#fbcfe8" />
           <p className="text-2xl font-bold">Start chatting!</p>
         </div>
       )}

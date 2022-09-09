@@ -5,8 +5,13 @@ import { uniq } from "lodash";
 import { Contact } from "./Contact";
 import { sortBy } from "lodash";
 
+// library without type, red squiggly
+// @ts-expect-error
+import { Ghost } from "react-kawaii";
+
 export function ContactList() {
-  const { address } = useAccount();
+  // const { address } = useAccount();
+  const address = "a";
 
   async function getAllContact() {
     const { data, error } = await supabase
@@ -73,7 +78,8 @@ export function ContactList() {
 
   if (data!.length == 0) {
     return (
-      <div className="flex justify-center my-10">
+      <div className="flex flex-col justify-center items-center my-10 space-y-5">
+        <Ghost size={125} mood="blissful" color="#fbcfe8" />
         <p>Contact empty, click the add icon and start chatting!</p>
       </div>
     );
