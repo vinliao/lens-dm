@@ -147,11 +147,19 @@ export default function Home() {
           {data.map((chat) => {
             if (chat.dm_from == address) {
               return (
-                <ChatBubble text={chat.dm_cleartext} left={false}></ChatBubble>
+                <ChatBubble
+                  text={chat.dm_cleartext}
+                  left={false}
+                  key={chat.timestamp}
+                ></ChatBubble>
               );
             } else {
               return (
-                <ChatBubble text={chat.dm_cleartext} left={true}></ChatBubble>
+                <ChatBubble
+                  text={chat.dm_cleartext}
+                  left={true}
+                  key={chat.timestamp}
+                ></ChatBubble>
               );
             }
           })}

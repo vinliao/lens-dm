@@ -10,8 +10,7 @@ import { sortBy } from "lodash";
 import { Ghost } from "react-kawaii";
 
 export function ContactList() {
-  // const { address } = useAccount();
-  const address = "a";
+  const { address } = useAccount();
 
   async function getAllContact() {
     const { data, error } = await supabase
