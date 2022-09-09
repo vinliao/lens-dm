@@ -6,7 +6,7 @@ import { GitHubLink } from "../components/GitHubLink";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { addressToLens } from "../components/util";
+import { addressToLens, lensToAddress } from "../components/util";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -26,8 +26,12 @@ export default function Home() {
     () => addressToLens(address)
   );
 
-  function goToChatPage() {
-    router.push(`/${newChatHandle}`);
+  async function goToChatPage() {
+    const contactAddress = await lensToAddress(newChatHandle);
+    if (contactAddress) {
+      router.push(`/${contactAddress}`);
+    }
+
     setNewChatHandle("");
   }
 
