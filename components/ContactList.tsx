@@ -4,6 +4,7 @@ import { useAccount } from "wagmi";
 import { uniq } from "lodash";
 import { Contact } from "./Contact";
 import { sortBy } from "lodash";
+import { addressToLens, checkIfEthAddress } from "./util";
 
 // library without type, red squiggly
 // @ts-expect-error
@@ -35,7 +36,8 @@ export function ContactList() {
         dm_from: string;
         dm_to: string;
         timestamp: number;
-        the_contact: string; // the recipient
+        contact_address: string; // the recipient's address
+        contact_display: string; // the address display string
       }
 
       let latestContactChat: ChatInterface[] = [];
@@ -47,9 +49,22 @@ export function ContactList() {
         const combined = fromContact.concat(toContact);
         const sorted = sortBy(combined, "timestamp");
         let lastChat = sorted[sorted.length - 1];
-        lastChat.the_contact = contact;
+
+        lastChat.contact_address = contact;
+
+        // get contact display (truncated address or lens name)
+        let contactDisplay = contact;
+        if (checkIfEthAddress(contact)) {
+          contactDisplay = contact.slice(0, 5) + "..." + contact.slice(-5);
+        }
+        addressToLens(contact).then((res) => {
+          if (res) {
+            contactDisplay = res;
+          }
+        });
+
+        lastChat.contact_display = contactDisplay;
         latestContactChat.push(lastChat);
-        // latestContactChat.push(sorted[sorted.length - 1]);
       });
 
       console.log(latestContactChat);
@@ -88,7 +103,7 @@ export function ContactList() {
     <>
       {data!.map((chat) => (
         <Contact
-          name={chat.the_contact}
+          name={chat.contact_display}
           key={chat.timestamp}
           timestamp={chat.timestamp}
           lastMessage={chat.dm_cleartext}
