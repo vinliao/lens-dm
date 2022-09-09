@@ -57,11 +57,11 @@ export function ContactList() {
         if (checkIfEthAddress(contact)) {
           contactDisplay = contact.slice(0, 5) + "..." + contact.slice(-5);
         }
-        addressToLens(contact).then((res) => {
-          if (res) {
-            contactDisplay = res;
-          }
-        });
+        // addressToLens(contact).then((res) => {
+        //   if (res) {
+        //     contactDisplay = res;
+        //   }
+        // });
 
         lastChat.contact_display = contactDisplay;
         latestContactChat.push(lastChat);
@@ -103,7 +103,8 @@ export function ContactList() {
     <>
       {data!.map((chat) => (
         <Contact
-          name={chat.contact_display}
+          contactDisplay={chat.contact_display}
+          contactAddress={chat.contact_address}
           key={chat.timestamp}
           timestamp={chat.timestamp}
           lastMessage={chat.dm_cleartext}

@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { checkIfEthAddress, addressToLens } from "../components/util";
+import { checkIfEthAddress } from "../components/util";
 
 // library without type, red squiggly
 // @ts-expect-error
@@ -46,12 +46,12 @@ export default function Home() {
     const { data: dataFrom, error: errorFrom } = await supabase
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
-      .match({ dm_from: address, dm_to: contactAddress });
+      .match({ dm_from: address, dm_to: id });
 
     const { data: dataTo, error: errorTo } = await supabase
       .from("dm")
       .select("dm_cleartext, dm_from, dm_to, timestamp")
-      .match({ dm_from: contactAddress, dm_to: address });
+      .match({ dm_from: id, dm_to: address });
 
     // error if only one side chat, or if no chat
     // huge potential of error here!
@@ -70,7 +70,7 @@ export default function Home() {
     const { data, error } = await supabase.from("dm").insert([
       {
         dm_from: address,
-        dm_to: contactAddress,
+        dm_to: id,
         dm_cleartext: inputToBeSend,
         timestamp: Date.now(),
       },
@@ -84,30 +84,30 @@ export default function Home() {
     onMutate: async () => {
       const newChat = {
         dm_from: address,
-        dm_to: contactAddress,
+        dm_to: id,
         dm_cleartext: currentInput,
         timestamp: Date.now(),
       };
 
       // cancel ongoing queries, get chat (for rollback)
-      await queryClient.cancelQueries(["chat", contactAddress]);
-      const previousChats = queryClient.getQueryData(["chat", contactAddress]);
+      await queryClient.cancelQueries(["chat", id]);
+      const previousChats = queryClient.getQueryData(["chat", id]);
 
       // set local data to add a new one while actually mutating the data
       // @ts-expect-error
       // prettier-ignore
-      queryClient.setQueryData(["chat", contactAddress], (old) => [...old,newChat]);
+      queryClient.setQueryData(["chat", id], (old) => [...old,newChat]);
       return previousChats;
     },
 
     onError: (err, newTodo, context) => {
       // rollback if the query errors out
       // @ts-expect-error
-      queryClient.setQueryData(["chat", contactAddress], context.previousTodos);
+      queryClient.setQueryData(["chat", id], context.previousTodos);
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries(["chat", contactAddress]);
+      queryClient.invalidateQueries(["chat", id]);
     },
   });
 

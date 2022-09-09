@@ -4,21 +4,23 @@ import enShort from "timeago.js/lib/lang/en_short";
 import * as timeago from "timeago.js";
 
 export function Contact({
-  name,
+  contactDisplay,
+  contactAddress,
   lastMessage,
   timestamp,
 }: {
-  name: string;
+  contactDisplay: string;
+  contactAddress: string;
   lastMessage: string;
   timestamp: number;
 }) {
   timeago.register("en_short", enShort);
 
   return (
-    <Link href={name}>
+    <Link href={contactAddress}>
       <div className="flex flex-col py-5 border-b-2 border-indigo-700 px-3 hover:cursor-pointer hover:bg-indigo-700 w-full hover:text-pink-300 transition text-pink-200">
         <div className="flex justify-between items-center">
-          <span className="">{name}</span>
+          <span className="">{contactDisplay}</span>
           <TimeAgo
             datetime={timestamp}
             locale="en_short"
