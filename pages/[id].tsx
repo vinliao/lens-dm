@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { checkIfEthAddress } from "../components/util";
+import { checkIfEthAddress, addressToLens } from "../components/util";
 
 // library without type, red squiggly
 // @ts-expect-error
@@ -20,22 +20,17 @@ export default function Home() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const { data, status } = useQuery(["chat", id], getChat, {
-    refetchInterval: 5000,
+    refetchInterval: 10000,
   });
 
-  let contactAddress = "";
+  const { data: lensName, status: lensNameStatus } = useQuery(
+    ["contact", id],
+    () => addressToLens(id)
+  );
+
   let contactDisplay = "";
   if (typeof id === "string" && checkIfEthAddress(id)) {
-    contactAddress = id;
     contactDisplay = id?.slice(0, 5) + "..." + id?.slice(-5);
-
-    // addressToLens(id).then((res) => {
-    //   console.log(res);
-    //   if (res) contactDisplay = res;
-    // });
-
-    // console.log(`address: ${contactAddress}`);
-    // console.log(`display: ${contactDisplay}`);
   }
 
   useEffect(() => {
@@ -128,7 +123,11 @@ export default function Home() {
             />
           </svg>
         </Link>
-        <span className="font-bold text-lg">{contactDisplay}</span>
+        {lensNameStatus == "success" && lensName ? (
+          <span className="font-bold text-lg">{lensName}</span>
+        ) : (
+          <span className="font-bold text-lg">{contactDisplay}</span>
+        )}
       </div>
 
       {status == "loading" && (

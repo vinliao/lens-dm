@@ -15,7 +15,7 @@ export function checkIfEthAddress(name: string) {
   return undefined;
 }
 
-export async function lensToAddress(handle: string | undefined) {
+export async function lensToAddress(handle: string | string[] | undefined) {
   if (!handle) return undefined;
 
   const profileQuery = gql`
@@ -46,7 +46,7 @@ export async function lensToAddress(handle: string | undefined) {
   return undefined;
 }
 
-export async function addressToLens(address: string | undefined) {
+export async function addressToLens(address: string | string[] | undefined) {
   if (!address) return undefined;
   // note: this gets default lens profile
   const profileQuery = gql`
