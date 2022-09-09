@@ -128,8 +128,6 @@ export default function Home() {
             <ContactList></ContactList>
           </div>
           <GitHubLink></GitHubLink>
-
-          <Warning></Warning>
         </>
       )}
     </div>
