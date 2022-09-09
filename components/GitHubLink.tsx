@@ -2,8 +2,8 @@ export function GitHubLink() {
   return (
     <div className="flex">
       <div className="flex-1"></div>
-      <a className="flex items-center space-x-2 m-3" href="https://github.com">
-        <span>GitHub</span>
+      <a className="flex items-center space-x-2 m-3 text-indigo-300" href="https://github.com">
+        <span className="underline">GitHub</span>
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
