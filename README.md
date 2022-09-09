@@ -1,27 +1,7 @@
-# Next.js + Tailwind CSS Example
+# lens-dm
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+WARNING: Pre-alpha software, chats are still unencrypted. Don't send sensitive stuff with this (yet)!
 
-## Deploy your own
+Welcome to lens-dm! This is a proof-of-concept for a chat app leveraging the [Lens protocol](https://lens.xyz). The v0.1 of this is very naive and unsophisticated: unencrypted DM stored in Postgres. This definitely can be better, safer, and faster.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Comments, suggestions? Ping me on Twitter: [@pixelhacks](https://twitter.com/pixelhacks). Or, chat with this temporary link: [https://lens-dm.vercel.app/0xb7254cE5Cb61f69b3Fc120b85F0f6b90d871036c](https://lens-dm.vercel.app/0xb7254cE5Cb61f69b3Fc120b85F0f6b90d871036c)
