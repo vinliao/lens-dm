@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import { sortBy } from "lodash";
 import { ChatBubble } from "../components/ChatBubble";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { checkIfEthAddress } from "../components/util";
 
 // library without type, red squiggly
 // @ts-expect-error
@@ -21,6 +22,11 @@ export default function Home() {
   const { data, status } = useQuery(["chat", id], getChat, {
     refetchInterval: 5000,
   });
+
+  let contactDisplay = id;
+  if (typeof id === "string" && checkIfEthAddress(id)) {
+    contactDisplay = id?.slice(0, 5) + "..." + id?.slice(-5);
+  }
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView();
@@ -111,9 +117,7 @@ export default function Home() {
             />
           </svg>
         </Link>
-        <span className="font-bold text-lg">
-          {id?.slice(0, 4) + "..." + id?.slice(-4)}
-        </span>
+        <span className="font-bold text-lg">{contactDisplay}</span>
       </div>
 
       {status == "loading" && (
@@ -137,7 +141,7 @@ export default function Home() {
 
       {status == "success" && data.length == 0 && (
         <div className="flex flex-col justify-center items-center h-full space-y-4">
-          <SpeechBubble size={125} mood="happy" color="#fbcfe8" />
+          <SpeechBubble size={100} mood="happy" color="#fbcfe8" />
           <p className="text-2xl font-bold">Start chatting!</p>
         </div>
       )}

@@ -5,18 +5,32 @@ import { ContactList } from "../components/ContactList";
 import { GitHubLink } from "../components/GitHubLink";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import { addressToLens } from "../components/util";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [newChatHandle, setNewChatHandle] = useState("");
-  const { address, isConnecting, isConnected, isDisconnected, isReconnecting } = useAccount();
+  const {
+    address,
+    isConnecting,
+    isConnected,
+    isDisconnected,
+    isReconnecting,
+  } = useAccount();
   const router = useRouter();
   const { disconnect } = useDisconnect();
+  const [userDisplayName, setUserDisplayName] = useState("");
 
   function goToChatPage() {
     router.push(`/${newChatHandle}`);
     setNewChatHandle("");
   }
+
+  addressToLens(address).then((res) => {
+    if (res) setUserDisplayName(res);
+    else setUserDisplayName(address!.slice(0, 5) + "..." + address!.slice(-5));
+  });
 
   return (
     <div className="max-w-lg mx-auto bg-indigo-800 text-pink-200 h-screen overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-800 relative">
@@ -53,7 +67,7 @@ export default function Home() {
           ></div>
         </div>
       )}
-      {(isDisconnected || isConnecting || isReconnecting) ? (
+      {isDisconnected || isConnecting || isReconnecting ? (
         <>
           <div className="flex flex-col justify-center items-center my-5">
             <p className="mb-2">Connect wallet to check your Lens inbox!</p>
@@ -89,7 +103,11 @@ export default function Home() {
               </div>
             </div>
             <div className="flex space-x-2 items-baseline">
-              <span>handlename.lens</span>
+              {userDisplayName ? (
+                <span>{userDisplayName}</span>
+              ) : (
+                <span>connecting...</span>
+              )}
               <span>·</span>
               <span
                 className="text-sm text-indigo-400 underline hover:cursor-pointer"
