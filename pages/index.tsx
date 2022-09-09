@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { addressToLens, lensToAddress } from "../components/util";
+import { Warning } from "../components/Warning";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -127,6 +128,8 @@ export default function Home() {
             <ContactList></ContactList>
           </div>
           <GitHubLink></GitHubLink>
+
+          <Warning></Warning>
         </>
       )}
     </div>
